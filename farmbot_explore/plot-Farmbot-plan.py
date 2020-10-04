@@ -30,7 +30,7 @@ def make_chart(design, file_label, title, gap_min, gap_max):
     zlist = []
 
     # create lists of plant centres and radii
-    for index, row in design1.iterrows():
+    for index, row in design.iterrows():
 
         plist.append(row['plant'])
         x = row['x-centre-first']
