@@ -296,3 +296,52 @@ dat_all %>% filter(date(ts2) == "2020-09-22", ts2 > "2020-09-22 10:35:04") %>%
         labs(title = "Comparing balcony and Farmbot temperatures 2020-09-22",
              x = "Hour",
              y = "Temperature")
+
+# Compare garage and Qube inside
+dat_all %>% filter(date(ts2) == "2020-10-07") %>% 
+        mutate(location = ifelse(location == "Swingball", "Farmbot", location)) %>% 
+        ggplot(aes(x = ts2, y = temp_dht22, col = location)) + geom_line() +
+        scale_x_datetime(date_breaks = "hours" , date_labels = "%H") +
+        theme_classic() +
+        theme(legend.position = "bottom") +
+        labs(title = "Comparing balcony and Farmbot temperatures 2020-10-07",
+             x = "Hour",
+             y = "Temperature")
+
+# save data for d3
+
+
+dat_all <- dat_all %>% mutate(time = substr(ts2,  12,19)) 
+
+write_delim(x = dat_all %>% filter(date(ts2) == "2020-10-07") %>% select((time), temp_dht22), 
+            path ="~/Google Drive/WhatsNext/What not/D3 files/temp_20_10_07.csv",
+            delim = ",")
+
+write_delim(x = dat_all %>% filter(date(ts2) == "2020-10-07") %>% select(ts2, temp_dht22), 
+            path ="~/Google Drive/WhatsNext/What not/D3 files/temp_20_10_07_2.csv",
+            delim = ",")
+
+dat_all <- dat_all %>% mutate(date = substr(ts2,  1,10)) 
+
+write_delim(x = dat_all %>% filter(date(ts2) == "2020-10-07") %>% select(date, temp_dht22), 
+            path ="~/Google Drive/WhatsNext/What not/D3 files/temp_20_10_07_3.csv",
+            delim = ",")
+
+date_beg = date("2020-07-10")
+date_beg + 834
+date = as_tibble(seq(date_beg,date_beg + 833,1))
+
+temperature = dat_all %>% filter(date(ts2) == "2020-10-07") %>% select(temp_dht22)
+bind_cols(date, temperature)
+
+
+write_delim(temperature, 
+            path ="~/Google Drive/WhatsNext/What not/D3 files/temp_20_10_07_4.csv",
+            delim = ",")
+
+
+loc1 %>% count(location)
+
+
+
+

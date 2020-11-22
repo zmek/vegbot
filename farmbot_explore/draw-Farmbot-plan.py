@@ -10,6 +10,7 @@ import seaborn as sns
 from matplotlib.patches import Circle, Rectangle
 import copy
 import pickle
+import json
 
 # set params for plot
 TINY_SIZE = 6
@@ -130,9 +131,11 @@ x_start = beddict[bed_order[i]]["xmin"]
 for index, row in plants.iterrows():
     num = 1
     innerdict = {}
-    innerdict['plant'] = row['plant']
+
+    innerdict['name'] = row['plant'] # changed innerdict['plant'] to 'innerdict['name']
     innerdict['index'] = str(row['index']+1)
     innerdict['radius'] = row['spacing_y']/2
+    innerdict['pointer_type'] = 'Plant'
 
     # prepare y dimension
     y_span = beddict[bed_order[i]]["ymax"] - beddict[bed_order[i]]["ymin"]
@@ -177,6 +180,13 @@ for index, row in plants.iterrows():
             x_start = beddict[bed_order[i]]["xmin"]
 
     current_row = 1
+
+# write plantDict to json
+#j = json.dumps(plantdict, indent=4)
+
+with open('/Users/zellaking/GitHubRepos/vegbot/farmbot_explore/plantdict.json', 'w') as f:
+    json.dump(plantdict, f)
+f.close()
 
 
 # initialise plot
