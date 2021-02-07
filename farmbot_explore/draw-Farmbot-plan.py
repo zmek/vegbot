@@ -26,11 +26,15 @@ plt.rc('ytick', labelsize=SMALL_SIZE)    # fontsize of the tick labels
 plt.rc('legend', fontsize=SMALL_SIZE)    # legend fontsize
 plt.rc('figure', titlesize=BIGGER_SIZE)  # fontsize of the figure title
 
+WIDTH_TOTAL = 2860 + 150 # as measured on 22.11.20
+LENGTH_TOTAL = 5870 + 150 # as measured on 22.11.20
 BRICK_WIDTH = 75
-PATH_WIDTH = 600
+THIN_BED_WIDTH = 1050
+PATH_WIDTH = WIDTH_TOTAL - 2*THIN_BED_WIDTH - 4*BRICK_WIDTH
 PATH_LENGTH = 4500
-SPLIT_Y_AT = 3000 - 1200
-NARROW_BIT_WIDTH = (3000 - PATH_WIDTH)/2
+SPLIT_Y_AT = WIDTH_TOTAL - 1200
+NARROW_BIT_WIDTH = (WIDTH_TOTAL - PATH_WIDTH)/2
+
 
 LETTERS = [chr(i) for i in range(ord('a'), ord('z') + 1)]
 
@@ -39,73 +43,110 @@ LETTERS = [chr(i) for i in range(ord('a'), ord('z') + 1)]
 beddict = {
     "frontL": {
         "xmin": BRICK_WIDTH,
-        "xmax": 6000 - PATH_LENGTH,
+        "xmax": LENGTH_TOTAL - PATH_LENGTH,
         "ymin": SPLIT_Y_AT,
-        "ymax": 3000 - BRICK_WIDTH,
+        "ymax": WIDTH_TOTAL - BRICK_WIDTH,
     },
     "frontR": {
-        "xmin": 6000 - PATH_LENGTH,
-        "xmax": 6000 - BRICK_WIDTH,
-        "ymin": 3000 - NARROW_BIT_WIDTH + BRICK_WIDTH,
-        "ymax": 3000 - BRICK_WIDTH
+        "xmin": LENGTH_TOTAL - PATH_LENGTH,
+        "xmax": LENGTH_TOTAL - BRICK_WIDTH,
+        "ymin": WIDTH_TOTAL - NARROW_BIT_WIDTH + BRICK_WIDTH,
+        "ymax": WIDTH_TOTAL - BRICK_WIDTH
     },
     "backL": {
         "xmin": BRICK_WIDTH,
-        "xmax": 6000-PATH_LENGTH,
+        "xmax": LENGTH_TOTAL-PATH_LENGTH,
         "ymin": BRICK_WIDTH,
         "ymax": SPLIT_Y_AT
     },
     "backR": {
-        "xmin": 6000 - PATH_LENGTH,
-        "xmax": 6000 - BRICK_WIDTH,
+        "xmin": LENGTH_TOTAL - PATH_LENGTH,
+        "xmax": LENGTH_TOTAL - BRICK_WIDTH,
         "ymin": BRICK_WIDTH,
         "ymax": NARROW_BIT_WIDTH - BRICK_WIDTH
 
     },
     "wholeL": {
         "xmin": BRICK_WIDTH,
-        "xmax": 6000 - PATH_LENGTH,
+        "xmax": LENGTH_TOTAL - PATH_LENGTH,
         "ymin": BRICK_WIDTH,
-        "ymax": 3000 - BRICK_WIDTH,
+        "ymax": WIDTH_TOTAL - BRICK_WIDTH,
 
     },
 }
 
 wooddict = {
     "wallB": {
-        "xy": (0, 0), "width": 6000, "height": BRICK_WIDTH
+        "xy": (0, 0), "width": LENGTH_TOTAL, "height": BRICK_WIDTH
     },
     "wallF": {
-        "xy": (0, 3000-BRICK_WIDTH), "width": 6000, "height": BRICK_WIDTH
+        "xy": (0, WIDTH_TOTAL-BRICK_WIDTH), "width": LENGTH_TOTAL, "height": BRICK_WIDTH
     },
     "wallL": {
-        "xy": (0, 0), "width": BRICK_WIDTH, "height": 3000
+        "xy": (0, 0), "width": BRICK_WIDTH, "height": WIDTH_TOTAL
     },
     "wallR1": {
-        "xy": (6000 - BRICK_WIDTH, 0), "width": BRICK_WIDTH, "height": NARROW_BIT_WIDTH
+        "xy": (LENGTH_TOTAL - BRICK_WIDTH, 0), "width": BRICK_WIDTH, "height": NARROW_BIT_WIDTH
     },
     "wallR2": {
-        "xy": (6000 - BRICK_WIDTH, 3000 - NARROW_BIT_WIDTH),
+        "xy": (LENGTH_TOTAL - BRICK_WIDTH, WIDTH_TOTAL - NARROW_BIT_WIDTH),
         "width": BRICK_WIDTH,
         "height": NARROW_BIT_WIDTH
     },
     "wallPathB": {
-        "xy": (6000 - PATH_LENGTH, NARROW_BIT_WIDTH-BRICK_WIDTH),
+        "xy": (LENGTH_TOTAL - PATH_LENGTH, NARROW_BIT_WIDTH-BRICK_WIDTH),
         "width": PATH_LENGTH,
         "height": BRICK_WIDTH
     },
     "wallPathF": {
-        "xy": (6000 - PATH_LENGTH, 3000-(NARROW_BIT_WIDTH)),
+        "xy": (LENGTH_TOTAL - PATH_LENGTH, WIDTH_TOTAL-(NARROW_BIT_WIDTH)),
         "width": PATH_LENGTH,
         "height": BRICK_WIDTH}
     ,
     "wallPathL": {
-        "xy": (6000 - PATH_LENGTH, NARROW_BIT_WIDTH-BRICK_WIDTH),
+        "xy": (LENGTH_TOTAL - PATH_LENGTH, NARROW_BIT_WIDTH-BRICK_WIDTH),
         "width": BRICK_WIDTH,
         "height": PATH_WIDTH+2*BRICK_WIDTH
     },
 }
 
+strutdict = {
+    "back1": {
+        "xy": (LENGTH_TOTAL-1420, BRICK_WIDTH),
+        "width": 3,
+        "height": THIN_BED_WIDTH
+    },
+    "back2": {
+        "xy": (LENGTH_TOTAL - 2910, BRICK_WIDTH),
+        "width": 3,
+        "height": THIN_BED_WIDTH
+    },
+    "back3": {
+        "xy": (LENGTH_TOTAL - 4420, BRICK_WIDTH),
+        "width": 3,
+        "height": THIN_BED_WIDTH
+    },
+    "front1": {
+        "xy": (LENGTH_TOTAL - 1420, 3*BRICK_WIDTH + THIN_BED_WIDTH + PATH_WIDTH),
+        "width": 3,
+        "height": THIN_BED_WIDTH
+    },
+    "front2": {
+        "xy": (LENGTH_TOTAL - 2910, 3*BRICK_WIDTH + THIN_BED_WIDTH + PATH_WIDTH),
+        "width": 3,
+        "height": THIN_BED_WIDTH
+    },
+    "front3": {
+        "xy": (LENGTH_TOTAL - 4420, 3*BRICK_WIDTH + THIN_BED_WIDTH + PATH_WIDTH),
+        "width": 3,
+        "height": THIN_BED_WIDTH
+    },
+    "fat" : {
+        "xy": (BRICK_WIDTH, 1410 + BRICK_WIDTH),
+        "width": LENGTH_TOTAL - BRICK_WIDTH - PATH_LENGTH,
+        "height": 3
+    }
+}
 
 # set bed order
 bed_order = ["frontL", "frontR", "backL", "backR"]
@@ -192,10 +233,10 @@ f.close()
 # initialise plot
 fig = plt.figure(figsize=(11, 7.5), dpi=300)
 ax = fig.add_subplot(aspect = 'equal')
-fig.suptitle('Proposed Farmbot layout')
-ax.set_xlim(xmax=6000, xmin=0)
-ax.set_ylim(ymax=0, ymin=3000) #switch these round to invert the axis
-ax.set_yticks(np.arange(0,3000,step=200))
+fig.suptitle('Proposed Farmbot layout - with built dimensions')
+ax.set_xlim(xmax=LENGTH_TOTAL, xmin=0)
+ax.set_ylim(ymax=0, ymin=WIDTH_TOTAL) #switch these round to invert the axis
+ax.set_yticks(np.arange(0,WIDTH_TOTAL,step=200))
 
 ax.set_ylabel('Farmbot\'s y axis')
 ax.set_xlabel('Farmbot\'s x axis')
@@ -207,6 +248,12 @@ ax.grid(b=True, which='major', color='#999999', linestyle='-', alpha=0.2)
 for key, values in wooddict.items():
     rect = Rectangle(wooddict[key]['xy'], wooddict[key]['width'], wooddict[key]['height'],
                      linewidth=1, edgecolor='brown', facecolor='brown', alpha=0.5)
+    ax.add_patch(rect)
+
+# draw struts
+for key, values in strutdict.items():
+    rect = Rectangle(strutdict[key]['xy'], strutdict[key]['width'], strutdict[key]['height'],
+                     linewidth=1, edgecolor='grey', facecolor='grey', alpha=0.5)
     ax.add_patch(rect)
 
 # show beds
@@ -237,7 +284,7 @@ for key, values in plantdict.items():
             ax.text(plantdict[key]['x'] + 50, plantdict[key]['y'] + 500, plantdict[key]['index'], fontsize=TINY_SIZE)
 
 fig.show()
-fig.savefig("veg_plan3.pdf")
+fig.savefig("veg_plan4.pdf")
 
 # attempts at adding a key
 plt.subplots_adjust(top=500)

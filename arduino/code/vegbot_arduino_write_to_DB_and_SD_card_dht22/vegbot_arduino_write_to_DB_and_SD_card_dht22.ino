@@ -10,10 +10,10 @@
 
 
 // set arduino ID
-const int arduinoId = 1; //change file log name in 3 places
+const int arduinoId = 2; //change file log name in 3 places
 
 // set constants for DHT22
-#define DHTPIN 1     // what pin we're connected to
+#define DHTPIN 2     // what pin we're connected to
 #define DHTTYPE DHT22   // DHT 22  (AM2302)
 DHT dht(DHTPIN, DHTTYPE); //// Initialize DHT sensor for normal 16mhz Arduino
 
@@ -64,7 +64,7 @@ void setup() {
   }
 
   // init the logfile
-  dataFile = SD.open("log-1007.csv", FILE_WRITE); // change this at end of file as well
+  dataFile = SD.open("log-2008.csv", FILE_WRITE); // change this at end of file as well
   delay(1000);
 
     // init the CSV file with headers
@@ -108,7 +108,7 @@ void loop() {
   currentMillis = millis(); 
 
     // init the logfile
-    dataFile = SD.open("log-1007.csv", FILE_WRITE);
+    dataFile = SD.open("log-2008.csv", FILE_WRITE);
     delay(1000);
   
      // read all the sensor values from ENV
@@ -265,7 +265,7 @@ void sendToPHP(
     client.print("&millis=");
     client.print(currentMillis);
 
-    client.print("&filename=log-1007.csv");
+    client.print("&filename=log-2008.csv");
     
     client.print(" ");      //SPACE BEFORE HTTP/1.1
     client.print("HTTP/1.1");

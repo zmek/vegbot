@@ -1,7 +1,7 @@
 # Load libraries
 # ==============
 
-library(DBI)
+#library(DBI)
 library(dplyr)
 library(tidyverse)
 library(lubridate)
@@ -133,6 +133,9 @@ log_2006 <- as_tibble(read_csv("~/GitHubRepos/vegbot/arduino/data-raw/sdcards/Ar
 
 log_1007 <- as_tibble(read_csv("~/GitHubRepos/vegbot/arduino/data-raw/sdcards/Arduino1/LOG-1007.CSV"))
 
+log_1008 <- as_tibble(read_csv("~/GitHubRepos/vegbot/arduino/data-raw/sdcards/Arduino1/LOG-1008.CSV"))
+log_2008 <- as_tibble(read_csv("~/GitHubRepos/vegbot/arduino/data-raw/sdcards/Arduino2/LOG-2008.CSV"))
+
 
 
 log_1001$filename <- "log-1001.csv"
@@ -147,7 +150,8 @@ log_2005$filename <- "log-2005.csv"
 log_1006$filename <- "log-1006.csv"
 log_2006$filename <- "log-2006.csv"
 log_1007$filename <- "log-1007.csv"
-
+log_1008$filename <- "log-1008.csv"
+log_2008$filename <- "log-2008.csv"
 
 
 # process data from WebFaction
@@ -176,6 +180,8 @@ log_2005 <- process_log_file(log_2005, dat1)
 log_1006 <- process_log_file(log_1006, dat1)
 log_2006 <- process_log_file(log_2006, dat1)
 log_1007 <- process_log_file(log_1007, dat1)
+log_1008 <- process_log_file(log_1008, dat1)
+log_2008 <- process_log_file(log_2008, dat1)
 
 # merge files
 dat2 <- dplyr::union(log_1001, log_1002)
@@ -189,7 +195,10 @@ dat2 <- dplyr::union(dat2, log_2005)
 dat2 <- dplyr::union(dat2, log_1006)
 dat2 <- dplyr::union(dat2, log_2006)
 dat2 <- dplyr::union(dat2, log_1007)
+dat2 <- dplyr::union(dat2, log_1008)
 
+
+dat2 <- dplyr::union(log_1008, log_2008)
 
 dat_upper <- get_plot_data(dat2, loc1, "Upper plot")
 dat_lower <- get_plot_data(dat2, loc1, "Lower plot")
@@ -200,6 +209,10 @@ dat_farmbot_qube_end <- get_plot_data(dat2, loc1, "Farmbot Qube end")
 dat_qube_inside <- get_plot_data(dat2, loc1, "Qube inside")
 dat_garage_inside <- get_plot_data(dat2, loc1, "Garage inside")
 dat_balcony <- get_plot_data(dat2, loc1, "Balcony")
+dat_kitchen_low <- get_plot_data(dat2, loc1, "Floor level in kitchen")
+
+dat_kitchen_high <- get_plot_data(dat2, loc1, "In lantern light")
+
 
 dat_all <- dplyr::union(dat_upper, dat_lower)
 dat_all <- dplyr::union(dat_all, dat_swingball)
@@ -211,12 +224,32 @@ dat_all <- dplyr::union(dat_all, dat_qube_inside)
 dat_all <- dplyr::union(dat_all, dat_garage_inside)
 dat_all <- dplyr::union(dat_all, dat_balcony)
 
+dat_all <- dplyr::union(dat_kitchen_low, dat_kitchen_high)
 
 dat_all <- dat_all %>% mutate(ts2 = ts2 + hours(1) )
 
 # Create charts
-dat_all %>% ggplot(aes(x = ts2, y = temp_dht22, col = location)) + geom_line() +
-        theme_classic()
+dat_all %>% filter(ts2 > '2020-12-02 08:30:00') %>% ggplot(aes(x = ts2, y = temp_dht22, col = location)) + geom_line() +
+        scale_x_datetime(date_breaks = "4 hours" , date_labels = "%d-%m - %H:00")  +
+        theme(legend.position = "bottom") +
+        labs(title = "Comparing kitchen floor to lantern light",
+             x = NULL,
+             y = "Temperature",
+             col = "Location") +
+        theme(axis.text.x = element_text(angle = 45, vjust = 0.5, hjust=1))
+
+dat_all <- dat_all %>% 
+        mutate(include = case_when(ts2 > '2020-12-02 08:30:00' & ts2 < '2020-12-03 08:30:00' ~ TRUE,
+                                   ts2 > '2020-12-04 08:30:00' & ts2 < '2020-12-07 08:30:00' ~ TRUE))
+
+dat_all %>% filter(include) %>% ggplot(aes(x = ts2, y = temp_dht22, col = location)) + geom_line() +
+        scale_x_datetime(date_breaks = "4 hours" , date_labels = "%d-%m - %H:00")  +
+        theme(legend.position = "bottom") +
+        labs(title = "Comparing kitchen floor to lantern light",
+             x = NULL,
+             y = "Temperature",
+             col = "Location") +
+        theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust=1))
 
 dat_all %>% mutate(date = date(ts2)) %>% 
         ggplot(aes(x = ts2, y = temp_dht22, col = location)) + geom_line() +
@@ -342,6 +375,6 @@ write_delim(temperature,
 
 loc1 %>% count(location)
 
-
+write_delim(dat_all %>% select(-filename), path = "~/GitHubRepos/vegbot/arduino/kitchen-temp.csv", delim = ",")
 
 
