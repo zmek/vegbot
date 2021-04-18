@@ -1,0 +1,22 @@
+plant,sown,start_x,start_y,spacing_y,number,implied end y,note
+lettuce valmaine,2021-02-20,30,30,300,9,2430,some mixed with seeds sown 4/3
+lettuce little gem,2021-02-20,230,180,300,9,2580,some mixed with seeds sown 4/3
+lettuce valmaine,2021-03-04,430,30,300,9,2430,
+lettuce little gem,2021-03-04,630,180,300,9,2580,
+spinach perpetual,2021-02-20,830,30,300,9,2430,
+spinach medania,2021-02-20,1030,180,300,9,2580,
+spinach perpetual,2021-03-04,1230,30,300,4,930,
+spinach perpetual,2021-03-04,1430,180,300,3,780,
+spinach perpetual,2021-03-04,1630,30,300,4,930,
+spinach perpetual,2021-03-04,1830,180,300,3,780,
+spinach medania,2021-03-04,1230,2030,300,3,2630,
+spinach medania,2021-03-04,1430,1830,300,3,2430,
+spinach medania,2021-03-04,1630,1980,300,3,2580,
+spinach medania,2021-03-04,1830,1830,300,3,2430,
+spinach perpetual,2021-03-04,1180,1180,300,2,1480,
+onions santero,2021-02-20,4260,1880,200,5,2680,
+onions red baron,2021-02-20,4440,1880,200,5,2680,
+onions red baron,2021-02-20,4620,1880,200,5,2680,
+potatoes rocket,2021-09-04,4880,1930,350,3,2630,
+potatoes rocket,2021-09-04,5230,1930,350,3,2630,
+potatoes rocket,2021-09-04,5580,1930,350,3,2630,
